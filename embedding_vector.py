@@ -11,17 +11,13 @@ import pickle
 dotenv.load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
-# #official documentation is wrong
-# def get_embedding(text, model="text-embedding-ada-002"):
-#    text = text.replace("\n", " ")
-#    return client.embeddings.create(input = [text], model=model)['data'][0]['embedding']
-
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
 def get_embedding(text, model="text-embedding-ada-002"):
    text = text.replace("\n", " ")
    response = client.embeddings.create(input = [text], model=model)
+   print(response)
    return response.data[0].embedding
+
 
 # dataset_path = "./movie_plots.csv"
 # df = pd.read_csv(dataset_path)
